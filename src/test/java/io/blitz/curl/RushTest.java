@@ -66,7 +66,9 @@ public class RushTest {
                 + "]}}");
         
         Rush r = new Rush("user", "public-key", "localhost", 9295);
-        r.setUrl(new URL("http://example.com"));
+        Collection<TestStep> steps = new ArrayList<TestStep>();
+        steps.add(new TestStep(new URL("http://example.com")));
+        r.setSteps(steps);
         Collection<Interval> intervals = new ArrayList<Interval>();
         intervals.add(new Interval(1, 10, 10));
         r.setPattern(new Pattern(intervals));
@@ -84,7 +86,7 @@ public class RushTest {
         String output = handler.getConnection().getOutputStreamAsString("UTF-8");
         assertEquals(output, "{\"pattern\":{\"intervals\":["
                 + "{\"start\":1,\"end\":10,\"duration\":10}]},"
-                + "\"url\":\"http://example.com\"}");
+                + "\"steps\":[{\"url\":\"http://example.com\"}]}");
     }
     
     @Test
@@ -95,7 +97,9 @@ public class RushTest {
         
         try {
             Rush r = new Rush("user", "public-key", "localhost", 9295);
-            r.setUrl(new URL("http://example.com"));
+            Collection<TestStep> steps = new ArrayList<TestStep>();
+            steps.add(new TestStep(new URL("http://example.com")));
+            r.setSteps(steps);
             Collection<Interval> intervals = new ArrayList<Interval>();
             intervals.add(new Interval(1, 10, 10));
             r.setPattern(new Pattern(intervals));
@@ -130,7 +134,9 @@ public class RushTest {
 
         try {
             Rush r = new Rush("user", "public-key", "localhost", 9295);
-            r.setUrl(new URL("http://example.com"));
+            Collection<TestStep> steps = new ArrayList<TestStep>();
+            steps.add(new TestStep(new URL("http://example.com")));
+            r.setSteps(steps);
             Collection<Interval> intervals = new ArrayList<Interval>();
             intervals.add(new Interval(1, 10, 10));
             r.setPattern(new Pattern(intervals));
@@ -153,7 +159,7 @@ public class RushTest {
             String output = handler.getConnection().getOutputStreamAsString("UTF-8");
             assertEquals(output, "{\"pattern\":{\"intervals\":["
                     + "{\"start\":1,\"end\":10,\"duration\":10}]},"
-                    + "\"url\":\"http://example.com\"}");
+                    + "\"steps\":[{\"url\":\"http://example.com\"}]}");
         }
     }
 
@@ -161,7 +167,9 @@ public class RushTest {
     public void failedPatternValidation() throws MalformedURLException{
         try {
             Rush r = new Rush("user", "public-key", "localhost", 9295);
-            r.setUrl(new URL("http://example.com"));
+            Collection<TestStep> steps = new ArrayList<TestStep>();
+            steps.add(new TestStep(new URL("http://example.com")));
+            r.setSteps(steps);
             r.addListener(new IRushListener() {
 
                 public boolean onData(RushResult result) {
@@ -180,7 +188,7 @@ public class RushTest {
     }
 
     @Test
-    public void failedUrlValidation() throws MalformedURLException{
+    public void failedStepsValidation() throws MalformedURLException{
         try {
             Rush r = new Rush("user", "public-key", "localhost", 9295);
             Collection<Interval> intervals = new ArrayList<Interval>();
@@ -198,7 +206,7 @@ public class RushTest {
         } catch (ValidationException ex) {
             assertNotNull(ex);
             assertEquals("validation", ex.getError());
-            assertEquals("Url is required", ex.getReason());
+            assertEquals("At least one step is required", ex.getReason());
         }
     }
 
@@ -228,7 +236,9 @@ public class RushTest {
                 + "]}}");
         
         Rush r = new Rush("user", "public-key", "localhost", 9295);
-        r.setUrl(new URL("http://example.com"));
+        Collection<TestStep> steps = new ArrayList<TestStep>();
+        steps.add(new TestStep(new URL("http://example.com")));
+        r.setSteps(steps);
         Collection<Interval> intervals = new ArrayList<Interval>();
         intervals.add(new Interval(1, 10, 10));
         r.setPattern(new Pattern(intervals));
@@ -246,7 +256,7 @@ public class RushTest {
         String output = handler.getConnection().getOutputStreamAsString("UTF-8");
         assertEquals(output, "{\"pattern\":{\"intervals\":["
                 + "{\"start\":1,\"end\":10,\"duration\":10}]},"
-                + "\"url\":\"http://example.com\"}");
+                + "\"steps\":[{\"url\":\"http://example.com\"}]}");
     }
 }
 

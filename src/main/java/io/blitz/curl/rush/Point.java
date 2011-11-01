@@ -1,11 +1,13 @@
 package io.blitz.curl.rush;
 
+import java.util.Collection;
 import java.util.Date;
 
 /**
  * Snapshot of a rush at time[i] containing information about hits, errors
  * timeouts, etc.
  * @author ghermeto
+ * @see Step
  */
 public class Point {
     
@@ -53,9 +55,16 @@ public class Point {
      * The total number of bytes received
      */
     private Integer rxBytes;
+    
+    /**
+     * Per-step metric at this point in time
+     */
+    private Collection<Step> steps;
 
-    public Point(Date timestamp, Double duration, Integer total, Integer hits, 
-            Integer errors, Integer timeouts, Integer volume, Integer txBytes, Integer rxBytes) {
+    public Point(Date timestamp, Double duration, Integer total, 
+            Integer hits, Integer errors, Integer timeouts, Integer volume, 
+            Integer txBytes, Integer rxBytes, Collection<Step> steps) {
+        
         this.timestamp = timestamp;
         this.duration = duration;
         this.total = total;
@@ -65,6 +74,7 @@ public class Point {
         this.volume = volume;
         this.txBytes = txBytes;
         this.rxBytes = rxBytes;
+        this.steps = steps;
     }
 
     public Double getDuration() {
@@ -101,5 +111,9 @@ public class Point {
 
     public Integer getVolume() {
         return volume;
+    }
+
+    public Collection<Step> getSteps() {
+        return steps;
     }
 }

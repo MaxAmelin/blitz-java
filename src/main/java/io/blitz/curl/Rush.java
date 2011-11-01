@@ -5,6 +5,7 @@ import io.blitz.curl.exception.ValidationException;
 import io.blitz.curl.rush.IRushListener;
 import io.blitz.curl.rush.Point;
 import io.blitz.curl.rush.RushResult;
+import io.blitz.curl.rush.Step;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -67,17 +68,22 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
     }
 
     /**
-     * Verifies the Rush requirements. Should throw a <code>ValidationException</code>
-     * if the URL field is not set or if a pattern with at least 1 interval 
-     * is not present.
+     * Verifies the Rush requirements. Should throw a 
+     * <code>ValidationException</code> if the URL field is not set or 
+     * if a pattern with at least 1 interval is not present.
      * @throws ValidationException 
      */
     @Override
     public void checkRequirements() throws ValidationException {
-        if(getUrl() == null) {
-            throw new ValidationException("Url is required");
+        if (getSteps() == null) {
+            throw new ValidationException("At least one step is required");
         }
-        else if(pattern == null || 
+        for (TestStep step : getSteps()) {
+            if(step.getUrl() == null) {
+                throw new ValidationException("Url is required");
+            }
+        }
+        if (pattern == null || 
                 pattern.getIntervals() == null ||
                 pattern.getIntervals().isEmpty()) {
 
@@ -111,11 +117,27 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                 Integer txBytes = (Integer) item.get("txBytes");
                 Integer rxBytes = (Integer) item.get("rxBytes");
                 
+                Collection<Step> steps = new ArrayList<Step>();
+                Collection<?> stepList = (Collection<?>) item.get("steps");
+                if (stepList != null) {
+                    for(Object stepObj : stepList) {
+                        Map<String, Object> stepItem = (Map<String, Object>) stepObj;
+                        Number d = (Number) stepItem.get("d");
+                        Number c = (Number) stepItem.get("c");
+                        Integer e = (Integer) stepItem.get("e");
+                        Integer t = (Integer) stepItem.get("t");
+                        Integer a = (Integer) stepItem.get("a");
+                        
+                        Step step = new Step(d.doubleValue(), c.doubleValue(), e, t, a);
+                        steps.add(step);
+                    }
+                }
+                
                 Date time = (timestamp == null) ? null : new Date(timestamp.intValue()*1000);
-               Point point = new Point(time, duration.doubleValue(), total, hits, 
-                       errors, timeouts, volume, txBytes, rxBytes);
+                Point point = new Point(time, duration.doubleValue(), total, hits, 
+                       errors, timeouts, volume, txBytes, rxBytes, steps);
                
-               timeline.add(point);
+                timeline.add(point);
             }
         }
         return new RushResult(region, timeline);

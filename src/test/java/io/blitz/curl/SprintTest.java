@@ -5,12 +5,16 @@ import io.blitz.curl.exception.BlitzException;
 import io.blitz.curl.exception.ValidationException;
 import io.blitz.curl.sprint.ISprintListener;
 import io.blitz.curl.sprint.SprintResult;
+import io.blitz.curl.sprint.Step;
 import io.blitz.mock.MockURLStreamHandler;
 import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLStreamHandlerFactory;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -54,33 +58,39 @@ public class SprintTest {
         //job_status response
         handler.getConnection().setMappedData("/api/1/jobs/a123/status",
                 "{\"_id\":\"a123\",\"ok\":true, \"status\":\"completed\","
-                + "\"result\":{\"region\":\"california\",\"duration\":10,\"connect\":1,"
+                + "\"result\":{\"region\":\"california\",\"duration\":10,"
+                + "\"steps\":[{\"duration\":10,\"connect\":1,"
                 + "\"request\":{\"line\":\"GET / HTTP/1.1\",\"method\":\"GET\","
                 + "\"url\":\"http://localhost:9295\",\"headers\":{\"a\":\"b\"},\"content\":\"abc\"},"
                 + "\"response\":{\"line\":\"GET / HTTP/1.1\",\"message\":\"message\","
-                + "\"status\":200,\"headers\":{\"c\":\"d\"},\"content\":\"abd\"}}}");
+                + "\"status\":200,\"headers\":{\"c\":\"d\"},\"content\":\"abd\"}}]}}");
         
         Sprint s = new Sprint("user", "public-key", "localhost", 9295);
-        s.setUrl(new URL("http://example.com"));
+        Collection<TestStep> steps = new ArrayList<TestStep>();
+        steps.add(new TestStep(new URL("http://example.com")));
+        s.setSteps(steps);
         s.addListener(new ISprintListener() {
             public boolean onData(SprintResult result) {
                 assertNotNull(result);
-                assertNotNull(result.getRequest());
-                assertNotNull(result.getResponse());
+                assertNotNull(result.getSteps());
+                assertEquals(result.getSteps().size(), 1);
+                List<Step> steps = (List<Step>) result.getSteps();
+                assertNotNull(steps.get(0).getRequest());
+                assertNotNull(steps.get(0).getResponse());
                 assertEquals("california", result.getRegion());
-                assertEquals("GET", result.getRequest().getMethod());
-                assertEquals(new Integer(200), result.getResponse().getStatus());
-                assertNotNull(result.getRequest().getHeaders());
-                assertEquals(1, result.getRequest().getHeaders().size());
-                assertNotNull(result.getRequest().getHeaders().get("a"));
-                assertEquals("b", result.getRequest().getHeaders().get("a"));
+                assertEquals("GET", steps.get(0).getRequest().getMethod());
+                assertEquals(new Integer(200), steps.get(0).getResponse().getStatus());
+                assertNotNull(steps.get(0).getRequest().getHeaders());
+                assertEquals(1, steps.get(0).getRequest().getHeaders().size());
+                assertNotNull(steps.get(0).getRequest().getHeaders().get("a"));
+                assertEquals("b", steps.get(0).getRequest().getHeaders().get("a"));
                 return true;
             }
         });
         s.execute();
         assertEquals(handler.getConnection().getHeaders().get("X-API-Key"), "private-key");
         String output = handler.getConnection().getOutputStreamAsString("UTF-8");
-        assertEquals(output, "{\"url\":\"http://example.com\"}");
+        assertEquals(output, "{\"steps\":[{\"url\":\"http://example.com\"}]}");
     }
     
     @Test
@@ -90,16 +100,18 @@ public class SprintTest {
                 "{\"error\":\"login\", \"reason\":\"test\"}");
 
         try {
-        Sprint s = new Sprint("user", "public-key", "localhost", 9295);
-        s.setUrl(new URL("http://example.com"));
-        s.addListener(new ISprintListener() {
-            public boolean onData(SprintResult result) {
-                // fail if we get a ok message
-                assertFalse(true);
-                return true;
-            }
-        });
-        s.execute();
+            Sprint s = new Sprint("user", "public-key", "localhost", 9295);
+            Collection<TestStep> steps = new ArrayList<TestStep>();
+            steps.add(new TestStep(new URL("http://example.com")));
+            s.setSteps(steps);
+            s.addListener(new ISprintListener() {
+                public boolean onData(SprintResult result) {
+                    // fail if we get a ok message
+                    assertFalse(true);
+                    return true;
+                }
+            });
+            s.execute();
         }
         catch(AuthenticationException ex) {
                 assertNotNull(ex);
@@ -122,16 +134,18 @@ public class SprintTest {
                 "{\"error\":\"throttle\", \"reason\":\"Slow down please!\"}");
         
         try {
-        Sprint s = new Sprint("user", "public-key", "localhost", 9295);
-        s.setUrl(new URL("http://example.com"));
-        s.addListener(new ISprintListener() {
-            public boolean onData(SprintResult result) {
-                // fail if we get a ok message
-                assertFalse(true);
-                return true;
-            }
-        });
-        s.execute();
+            Sprint s = new Sprint("user", "public-key", "localhost", 9295);
+            Collection<TestStep> steps = new ArrayList<TestStep>();
+            steps.add(new TestStep(new URL("http://example.com")));
+            s.setSteps(steps);
+            s.addListener(new ISprintListener() {
+                public boolean onData(SprintResult result) {
+                    // fail if we get a ok message
+                    assertFalse(true);
+                    return true;
+                }
+            });
+            s.execute();
         }
         catch(BlitzException ex) {
             assertNotNull(ex);
@@ -141,12 +155,12 @@ public class SprintTest {
         finally {
             assertEquals(handler.getConnection().getHeaders().get("X-API-Key"), "private-key");
             String output = handler.getConnection().getOutputStreamAsString("UTF-8");
-            assertEquals(output, "{\"url\":\"http://example.com\"}");
+            assertEquals(output, "{\"steps\":[{\"url\":\"http://example.com\"}]}");
         }
     }
 
     @Test
-    public void failedUrlValidation() {
+    public void failedStepsValidation() {
         try {
             Sprint s = new Sprint("user", "public-key", "localhost", 9295);
             s.addListener(new ISprintListener() {
@@ -161,7 +175,7 @@ public class SprintTest {
         } catch (ValidationException ex) {
             assertNotNull(ex);
             assertEquals("validation", ex.getError());
-            assertEquals("Url is required", ex.getReason());
+            assertEquals("At least one step is required", ex.getReason());
         }
     }
 
@@ -183,33 +197,39 @@ public class SprintTest {
         //job_status response
         handler.getConnection().setMappedData("/api/1/jobs/a123/status",
                 "{\"_id\":\"a123\",\"ok\":true, \"status\":\"completed\","
-                + "\"result\":{\"region\":\"california\",\"duration\":10,\"connect\":1,"
+                + "\"result\":{\"region\":\"california\",\"duration\":10,"
+                + "\"steps\":[{\"duration\":10,\"connect\":1,"
                 + "\"request\":{\"line\":\"GET / HTTP/1.1\",\"method\":\"GET\","
                 + "\"url\":\"http://localhost:9295\",\"headers\":{\"a\":\"b\"},\"content\":\"abc\"},"
                 + "\"response\":{\"line\":\"GET / HTTP/1.1\",\"message\":\"message\","
-                + "\"status\":200,\"headers\":{\"c\":\"d\"},\"content\":\"abd\"}}}");
+                + "\"status\":200,\"headers\":{\"c\":\"d\"},\"content\":\"abd\"}}]}}");
         
         Sprint s = new Sprint("user", "public-key", "localhost", 9295);
-        s.setUrl(new URL("http://example.com"));
+        Collection<TestStep> steps = new ArrayList<TestStep>();
+        steps.add(new TestStep(new URL("http://example.com")));
+        s.setSteps(steps);
         s.addListener(new ISprintListener() {
             public boolean onData(SprintResult result) {
                 assertNotNull(result);
-                assertNotNull(result.getRequest());
-                assertNotNull(result.getResponse());
+                assertNotNull(result.getSteps());
+                assertEquals(result.getSteps().size(), 1);
+                List<Step> steps = (List<Step>) result.getSteps();
+                assertNotNull(steps.get(0).getRequest());
+                assertNotNull(steps.get(0).getResponse());
                 assertEquals("california", result.getRegion());
-                assertEquals("GET", result.getRequest().getMethod());
-                assertEquals(new Integer(200), result.getResponse().getStatus());
-                assertNotNull(result.getRequest().getHeaders());
-                assertEquals(1, result.getRequest().getHeaders().size());
-                assertNotNull(result.getRequest().getHeaders().get("a"));
-                assertEquals("b", result.getRequest().getHeaders().get("a"));
+                assertEquals("GET", steps.get(0).getRequest().getMethod());
+                assertEquals(new Integer(200), steps.get(0).getResponse().getStatus());
+                assertNotNull(steps.get(0).getRequest().getHeaders());
+                assertEquals(1, steps.get(0).getRequest().getHeaders().size());
+                assertNotNull(steps.get(0).getRequest().getHeaders().get("a"));
+                assertEquals("b", steps.get(0).getRequest().getHeaders().get("a"));
                 return false;
             }
         });
         s.execute();
         assertEquals(handler.getConnection().getHeaders().get("X-API-Key"), "private-key");
         String output = handler.getConnection().getOutputStreamAsString("UTF-8");
-        assertEquals(output, "{\"url\":\"http://example.com\"}");
+        assertEquals(output, "{\"steps\":[{\"url\":\"http://example.com\"}]}");
     }
 }
 

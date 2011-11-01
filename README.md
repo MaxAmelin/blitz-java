@@ -17,7 +17,7 @@ On your **pom.xml**
     <dependency>
         <groupId>io.blitz</groupId>
         <artifactId>blitz-api-client</artifactId>
-        <version>0.1.2</version>
+        <version>0.1.3</version>
     </dependency>
 
 Then
@@ -26,7 +26,9 @@ Then
 
 ```javascript
 Sprint s = new Sprint("your@account.com", "aqbcdge-sjfkgurti-sjdhgft-skdiues");
-s.setUrl(new URL("http://your.cool.app"));
+Collection<TestStep> steps = new ArrayList<TestStep>();
+steps.add(new TestStep(new URL("http://your.cool.app")));
+s.setSteps(steps);
 s.addListener(new ISprintListener() {
     public boolean onData(SprintResult result) {
         System.err.println("SUCCESS!");
@@ -39,7 +41,9 @@ s.execute();
 
 ```javascript
 Rush r = new Rush("your@account.com", "aqbcdge-sjfkgurti-sjdhgft-skdiues");
-r.setUrl(new URL("http://your.cool.app"));
+Collection<TestStep> steps = new ArrayList<TestStep>();
+steps.add(new TestStep(new URL("http://your.cool.app")));
+r.setSteps(steps);
 Collection<Interval> intervals = new ArrayList<Interval>();
 intervals.add(new Interval(1, 10, 10));
 r.setPattern(new Pattern(intervals));
