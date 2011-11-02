@@ -199,15 +199,15 @@ public class ClientTest {
             test.setRegion("ireland");
             step.setUserAgent("java-api");
             step.setStatus(200);
-            steps.add(step);
-            test.setSteps(steps);
             Map<String, IVariable> map = new HashMap<String, IVariable>();
             map.put("foo", new AlphaVariable(1, 5));
             map.put("bar", new NumberVariable(1, 5));
             String[] aVars = {"a","b"};
             Collection<String> vars = Arrays.asList(aVars);
             map.put("tar", new ListVariable(vars));
-            test.setVariables(map);
+            step.setVariables(map);
+            steps.add(step);
+            test.setSteps(steps);
             
             Map<String, Object> response = client.execute(test);
             
@@ -224,10 +224,10 @@ public class ClientTest {
             
             String output = handler.getConnection().getOutputStreamAsString("US-ASCII");
             String expected = "{\"steps\":[{\"url\":\"http://www.example.com\","
-                    + "\"user-agent\":\"java-api\",\"status\":200}],\"region\":\"ireland\","
+                    + "\"user-agent\":\"java-api\",\"status\":200,"
                     + "\"variables\":{\"tar\":{\"entries\":[\"a\",\"b\"],\"type\":\"list\"},"
                     + "\"foo\":{\"min\":1,\"max\":5,\"type\":\"alpha\"},"
-                    + "\"bar\":{\"min\":1,\"max\":5,\"type\":\"number\"}}}";
+                    + "\"bar\":{\"min\":1,\"max\":5,\"type\":\"number\"}}}],\"region\":\"ireland\"}";
             
             assertEquals(expected, output);
 

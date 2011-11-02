@@ -1,8 +1,6 @@
 package io.blitz.curl;
 
-import io.blitz.curl.config.variable.IVariable;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Base class for the Blitz curl tests.
@@ -21,12 +19,6 @@ public class TestEntity {
     private String region;
     
     /**
-     * Variables to be used on the url. The key should be the variable name and
-     * the variable instance
-     */
-    private Map<String, IVariable> variables;
-
-    /**
      * Getter for the region property
      * @return region
      */
@@ -40,22 +32,6 @@ public class TestEntity {
      */
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    /**
-     * Getter for the variable hash
-     * @return map of variables
-     */
-    public Map<String, IVariable> getVariables() {
-        return variables;
-    }
-
-    /**
-     * Setter for the variable hash
-     * @param variables 
-     */
-    public void setVariables(Map<String, IVariable> variables) {
-        this.variables = variables;
     }
 
     /**

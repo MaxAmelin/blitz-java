@@ -4,9 +4,11 @@ import com.google.gson.annotations.SerializedName;
 import io.blitz.curl.config.BasicAuthentication;
 import io.blitz.curl.config.Content;
 import io.blitz.curl.config.HttpHeader;
+import io.blitz.curl.config.variable.IVariable;
 import java.net.HttpCookie;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Base class for the Blitz curl tests.
@@ -79,6 +81,17 @@ public class TestStep {
      */
     private Content content;
     
+    /**
+     * Request method for the test
+     */
+    private String request;
+    
+    /**
+     * Variables to be used on the url. The key should be the variable name and
+     * the variable instance
+     */
+    private Map<String, IVariable> variables;
+
     /**
      * Getter for the content property
      * @return content
@@ -238,5 +251,37 @@ public class TestStep {
      */
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    /**
+     * Getter for the request property
+     * @return request method
+     */
+    public String getRequest() {
+        return request;
+    }
+
+    /**
+     * Setter for the request property
+     * @param request 
+     */
+    public void setRequest(String request) {
+        this.request = request;
+    }
+    
+    /**
+     * Getter for the variable hash
+     * @return map of variables
+     */
+    public Map<String, IVariable> getVariables() {
+        return variables;
+    }
+
+    /**
+     * Setter for the variable hash
+     * @param variables 
+     */
+    public void setVariables(Map<String, IVariable> variables) {
+        this.variables = variables;
     }
 }

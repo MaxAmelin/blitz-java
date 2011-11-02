@@ -20,7 +20,9 @@ import java.util.Map;
  * </p>
  * <pre>
  * Rush rush = new Rush("you@example.com", "my-bitz-api-key");
- * rush.setUrl(new java.net.URL("http://your.cool.app"));
+ * Collection<TestStep> steps = new ArrayList<TestStep>();
+ * steps.add(new TestStep(new URL("http://your.cool.app")));
+ * rush.setSteps(steps);
  * Collection<Interval> intervals = new ArrayList<Interval>();
  * intervals.add(new Interval(1, 250, 60));
  * rush.setPattern(new Pattern(intervals));

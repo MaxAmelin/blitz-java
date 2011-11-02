@@ -40,7 +40,7 @@ s.execute();
 OR
 
 ```javascript
-Sprint s = (Sprint) io.blitz.command.Curl.parse(
+Sprint s = (Sprint) io.blitz.command.Curl(
     "-r japan http://your.cool.app", 
     "your@account.com", 
     "aqbcdge-sjfkgurti-sjdhgft-skdiues"
@@ -74,7 +74,7 @@ r.execute();
 OR
 
 ```javascript
-Rush r =  (Rush) io.blitz.command.Curl.parse(
+Rush r =  (Rush) io.blitz.command.Curl(
     "-p 10-50:60 -r california http://your.cool.app",
     "your@account.com", 
     "aqbcdge-sjfkgurti-sjdhgft-skdiues"

@@ -18,7 +18,9 @@ import java.util.Map;
  * </p>
  * <pre>
  * Sprint sprint = new Sprint("you@example.com", "my-bitz-api-key");
- * sprint.setUrl(new java.net.URL("http://your.cool.app"));
+ * Collection<TestStep> steps = new ArrayList<TestStep>();
+ * steps.add(new TestStep(new URL("http://your.cool.app")));
+ * sprint.setSteps(steps);
  * sprint.addListener(new ISprintListener() {
  *      booolean onData(SprintResult result) {
  *          //do something...
