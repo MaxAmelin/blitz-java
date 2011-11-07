@@ -509,4 +509,31 @@ public class CurlTest {
         assertEquals("ireland", test.getRegion());
         assertEquals(new Integer(1000), step.getTimeout());
     }
+    
+    @Test
+    public void nullRegion() {
+        String cmd = "-r";
+        boolean throwed= false;
+        try {
+            AbstractTest test = Curl.parse(null, null, null, null, cmd);
+        }
+        catch(IllegalArgumentException e) {
+            throwed = true;
+        }
+        assertTrue(throwed);
+    }
+    
+    @Test
+    public void nullUserAgent() {
+        String cmd = "-A";
+        boolean throwed= false;
+        try {
+            AbstractTest test = Curl.parse(null, null, null, null, cmd);
+        }
+        catch(IllegalArgumentException e) {
+            throwed = true;
+            assertEquals("No URL specified", e.getMessage());
+        }
+        assertTrue(throwed);
+    }
 }

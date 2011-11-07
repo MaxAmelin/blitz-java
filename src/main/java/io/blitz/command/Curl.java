@@ -371,7 +371,10 @@ public class Curl {
      * @return string without quotes surrounding it
      */
     protected static String stripQuotes(String quoted) {
-        if(quoted.startsWith("'") || quoted.startsWith("\"")) {
+        if(quoted == null) {
+            return "";
+        }
+        else if(quoted.startsWith("'") || quoted.startsWith("\"")) {
             return quoted.substring(1, quoted.length()-1);
         }
         return quoted;
