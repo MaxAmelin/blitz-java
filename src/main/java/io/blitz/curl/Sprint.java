@@ -22,9 +22,12 @@ import java.util.Map;
  * steps.add(new TestStep(new URL("http://your.cool.app")));
  * sprint.setSteps(steps);
  * sprint.addListener(new ISprintListener() {
- *      booolean onData(SprintResult result) {
- *          //do something...
- *      }
+ *     public boolean onStatus(SprintResult result) {
+ *         //do something...
+ *     }
+ *     public void onComplete(SprintResult result) {
+ *         //do something...
+ *     }
  * });
  * sprint.execute();
  * </pre>
