@@ -30,7 +30,10 @@ Collection<TestStep> steps = new ArrayList<TestStep>();
 steps.add(new TestStep(new URL("http://your.cool.app")));
 s.setSteps(steps);
 s.addListener(new ISprintListener() {
-    public boolean onData(SprintResult result) {
+    public boolean onStatus(SprintResult result) {
+        System.err.print(".");
+    }
+    public void onComplete(SprintResult result) {
         System.err.println("SUCCESS!");
     }
 });
@@ -46,7 +49,10 @@ Sprint s = (Sprint) io.blitz.command.Curl.parse(
     "-r japan http://your.cool.app"
 );
 s.addListener(new ISprintListener() {
-    public boolean onData(SprintResult result) {
+    public boolean onStatus(SprintResult result) {
+        System.err.print(".");
+    }
+    public void onComplete(SprintResult result) {
         System.err.println("SUCCESS!");
     }
 });
@@ -64,7 +70,10 @@ Collection<Interval> intervals = new ArrayList<Interval>();
 intervals.add(new Interval(1, 10, 10));
 r.setPattern(new Pattern(intervals));
 r.addListener(new IRushListener() {
-    public boolean onData(RushResult result) {
+    public boolean onStatus(RushResult result) {
+        System.err.print(".");
+    }
+    public void onComplete(RushResult result) {
         System.err.println("SUCCESS!");
     }
 });
@@ -80,7 +89,10 @@ Rush r =  (Rush) io.blitz.command.Curl.parse(
     "-p 10-50:60 -r california http://your.cool.app"
 );
 r.addListener(new IRushListener() {
-    public boolean onData(RushResult result) {
+    public boolean onStatus(RushResult result) {
+        System.err.print(".");
+    }
+    public void onComplete(RushResult result) {
         System.err.println("SUCCESS!");
     }
 });
