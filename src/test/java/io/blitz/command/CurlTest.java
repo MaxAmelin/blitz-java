@@ -213,7 +213,7 @@ public class CurlTest {
     @Test
     public void singleURL() {
         String url = "http://example.com";
-        AbstractTest test = Curl.parse(url, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, url);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals(url, step.getUrl().toString());
@@ -222,7 +222,7 @@ public class CurlTest {
     @Test
     public void userAgent() {
         String cmd = "--user-agent \"Mozilla Firefox 3.6\" http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -233,7 +233,7 @@ public class CurlTest {
     public void noCommand() {
         boolean throwed= false;
         try {
-            AbstractTest test = Curl.parse("", null, null, null, null);
+            AbstractTest test = Curl.parse(null, null, null, null, "");
         }
         catch(IllegalArgumentException e) {
             throwed = true;
@@ -244,7 +244,7 @@ public class CurlTest {
     @Test
     public void oneCookie() {
         String cmd = "--cookie jsessionid=A256343FC47E http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -257,7 +257,7 @@ public class CurlTest {
     @Test
     public void twoCookies() {
         String cmd = "--cookie a=b -b c=d http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -273,7 +273,7 @@ public class CurlTest {
     @Test
     public void data() {
         String cmd = "--data form_field=123 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -284,7 +284,7 @@ public class CurlTest {
     @Test
     public void referer() {
         String cmd = "-e http://www.google.com http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -294,7 +294,7 @@ public class CurlTest {
     @Test
     public void header() {
         String cmd = "--header h1:v1 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -307,7 +307,7 @@ public class CurlTest {
     @Test
     public void region() {
         String cmd = "--region california http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -317,7 +317,7 @@ public class CurlTest {
     @Test
     public void status() {
         String cmd = "-s 200 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -327,7 +327,7 @@ public class CurlTest {
     @Test
     public void timeout() {
         String cmd = "-T 5000 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -337,7 +337,7 @@ public class CurlTest {
     @Test
     public void user() {
         String cmd = "-u john:smith http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -349,7 +349,7 @@ public class CurlTest {
     @Test
     public void request() {
         String cmd = "-X GET http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -359,7 +359,7 @@ public class CurlTest {
     @Test
     public void onePattern() {
         String cmd = "-p 10-20:30 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         io.blitz.curl.config.Pattern p = ((Rush)test).getPattern();
         assertEquals(1, p.getIntervals().size());
@@ -372,7 +372,7 @@ public class CurlTest {
     @Test
     public void twoPatterns() {
         String cmd = "-p 10-20:30,4-5:6 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         io.blitz.curl.config.Pattern p = ((Rush)test).getPattern();
         assertEquals(2, p.getIntervals().size());
@@ -391,7 +391,7 @@ public class CurlTest {
     @Test 
     public void listVariable() {
         String cmd = "-v:var list[a,b,c] http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertTrue(step.getVariables().containsKey("var"));
@@ -405,7 +405,7 @@ public class CurlTest {
     @Test 
     public void alphaVariable() {
         String cmd = "-v:var alpha[1,2] http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertTrue(step.getVariables().containsKey("var"));
@@ -417,7 +417,7 @@ public class CurlTest {
     @Test 
     public void numberVariable() {
         String cmd = "-v:var number[1,2] http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertTrue(step.getVariables().containsKey("var"));
@@ -429,7 +429,7 @@ public class CurlTest {
     @Test 
     public void udidVariable() {
         String cmd = "-v:var udid http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertTrue(step.getVariables().containsKey("var"));
@@ -440,7 +440,7 @@ public class CurlTest {
     @Test
     public void tlsv1() {
         String cmd = "-1 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -450,7 +450,7 @@ public class CurlTest {
     @Test
     public void sslv2() {
         String cmd = "-2 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -460,7 +460,7 @@ public class CurlTest {
     @Test
     public void sslv3() {
         String cmd = "-3 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);
         assertEquals("http://example.com", step.getUrl().toString());
@@ -470,7 +470,7 @@ public class CurlTest {
     @Test
     public void multistep() {
         String cmd = "http://example.com http://example.com/test";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(2,test.getSteps().size());
     
         TestStep step1 = ((List<TestStep>)test.getSteps()).get(0);
@@ -483,7 +483,7 @@ public class CurlTest {
     @Test
     public void multistepWithOptions() {
         String cmd = "-s 200 -X POST http://example.com -X GET http://example.com/test";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(2,test.getSteps().size());
 
         TestStep step1 = ((List<TestStep>)test.getSteps()).get(0);
@@ -499,7 +499,7 @@ public class CurlTest {
     @Test
     public void withOptions() {
         String cmd = "-s 200 -X POST -r ireland -T 1000 http://example.com";
-        AbstractTest test = Curl.parse(cmd, null, null, null, null);
+        AbstractTest test = Curl.parse(null, null, null, null, cmd);
         assertEquals(1,test.getSteps().size());
 
         TestStep step = ((List<TestStep>)test.getSteps()).get(0);

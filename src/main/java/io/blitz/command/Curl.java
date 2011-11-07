@@ -76,10 +76,10 @@ public class Curl {
      * @param apiKey api key used to authenticate
      * @return a sprint of rush instance ready to run
      */
-    public static AbstractTest parse(String command, 
-            String username, String apiKey) {
+    public static AbstractTest parse(String username, 
+            String apiKey, String command) {
         
-        return parse(command, username, apiKey, null, null);
+        return parse(username, apiKey, null, null, command);
     }
     
     /**
@@ -92,8 +92,8 @@ public class Curl {
      * @param port port for the service
      * @return a sprint of rush instance ready to run
      */
-    public static AbstractTest parse(String command, 
-            String username, String apiKey, String host, Integer port) {
+    public static AbstractTest parse(String username, 
+            String apiKey, String host, Integer port, String command) {
         
         if(command == null || command.length() == 0) {
             throw new IllegalArgumentException("No command line provided");

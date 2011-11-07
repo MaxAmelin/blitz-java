@@ -41,9 +41,9 @@ OR
 
 ```javascript
 Sprint s = (Sprint) io.blitz.command.Curl.parse(
-    "-r japan http://your.cool.app", 
     "your@account.com", 
-    "aqbcdge-sjfkgurti-sjdhgft-skdiues"
+    "aqbcdge-sjfkgurti-sjdhgft-skdiues",
+    "-r japan http://your.cool.app"
 );
 s.addListener(new ISprintListener() {
     public boolean onData(SprintResult result) {
@@ -75,9 +75,9 @@ OR
 
 ```javascript
 Rush r =  (Rush) io.blitz.command.Curl.parse(
-    "-p 10-50:60 -r california http://your.cool.app",
     "your@account.com", 
-    "aqbcdge-sjfkgurti-sjdhgft-skdiues"
+    "aqbcdge-sjfkgurti-sjdhgft-skdiues",
+    "-p 10-50:60 -r california http://your.cool.app"
 );
 r.addListener(new IRushListener() {
     public boolean onData(RushResult result) {
