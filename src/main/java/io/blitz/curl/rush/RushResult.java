@@ -1,5 +1,6 @@
 package io.blitz.curl.rush;
 
+import io.blitz.curl.IResult;
 import io.blitz.curl.Rush;
 import java.util.Collection;
 
@@ -11,7 +12,7 @@ import java.util.Collection;
  * @see Point
  * @see Rush
  */
-public class RushResult {
+public class RushResult implements IResult{
 
     /**
      * The region from which this sprint was executed

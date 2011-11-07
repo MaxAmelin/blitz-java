@@ -1,12 +1,13 @@
 package io.blitz.curl.sprint;
 
+import io.blitz.curl.IResult;
 import java.util.Collection;
 
 /**
  * Contains the result from a successful sprint.
  * @author ghermeto
  */
-public class SprintResult {
+public class SprintResult implements IResult{
     
     /**
      * The region from which this sprint was executed
