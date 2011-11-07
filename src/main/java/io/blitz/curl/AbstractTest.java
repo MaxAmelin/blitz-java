@@ -122,20 +122,35 @@ public abstract class AbstractTest<Listener extends IListener, Result>
     }
     
     /**
-     * Notify all listneres about an error response from blitz. It calls  
-     * <code>onData</code> on all listeners. If a listener returns false, it will
-     * automatically call abort after notifying all.
-     * @param result the result object from the JSON response 
+     * Notify all listneres about an success response from blitz. It calls  
+     * <code>onStatus</code> on all listeners. If a listener returns false, 
+     * it will automatically call abort after notifying all.
+     * @param result the result object from the JSON response
+     * @return if the execution will be aborted
      */
-    protected void notifySuccess(Map<String, Object> result) {
+    protected boolean notifyStatus(Map<String, Object> result) {
+        boolean progress = true;
         if(listeners != null) {
-            boolean progress = true;
             Result success = createSuccessResult(result);
             for(Listener listener : listeners) {
-                 progress = progress && listener.onData(success);
+                 progress = progress && listener.onStatus(success);
             }
             if(!progress) {
                 abort();
+            }
+        }
+        return progress;
+    }
+    
+    /**
+     * Notify all listneres that the test finished successfully.
+     * @param result the result object from the JSON response 
+     */
+    protected void notifyComplete(Map<String, Object> result) {
+        if(listeners != null) {
+            Result success = createSuccessResult(result);
+            for(Listener listener : listeners) {
+                 listener.onComplete(success);
             }
         }
     }
@@ -201,12 +216,16 @@ public abstract class AbstractTest<Listener extends IListener, Result>
                     String reason = (String) result.get("reason");
                     throw new BlitzException(error, reason);
                 }
-                //notify the listeners that a successful status was acquired
-                notifySuccess(result);
-                
-                if("completed".equalsIgnoreCase(status)) {
+                else if("completed".equalsIgnoreCase(status)) {
+                    // notify the listeners that the test was successful
+                    notifyComplete(result);
                     break;
                 }
+                //notify the listeners that a successful status was acquired
+                if(!notifyStatus(result)) {
+                    break;
+                }
+                
             }while(true);
             
         } catch (InterruptedException ex) {

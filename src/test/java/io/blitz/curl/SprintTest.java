@@ -70,7 +70,7 @@ public class SprintTest {
         steps.add(new TestStep(new URL("http://example.com")));
         s.setSteps(steps);
         s.addListener(new ISprintListener() {
-            public boolean onData(SprintResult result) {
+            public void onComplete(SprintResult result) {
                 assertNotNull(result);
                 assertNotNull(result.getSteps());
                 assertEquals(result.getSteps().size(), 1);
@@ -84,8 +84,8 @@ public class SprintTest {
                 assertEquals(1, steps.get(0).getRequest().getHeaders().size());
                 assertNotNull(steps.get(0).getRequest().getHeaders().get("a"));
                 assertEquals("b", steps.get(0).getRequest().getHeaders().get("a"));
-                return true;
             }
+            public boolean onStatus(SprintResult result){ return true; }
         });
         s.execute();
         assertEquals(handler.getConnection().getHeaders().get("X-API-Key"), "private-key");
@@ -105,7 +105,10 @@ public class SprintTest {
             steps.add(new TestStep(new URL("http://example.com")));
             s.setSteps(steps);
             s.addListener(new ISprintListener() {
-                public boolean onData(SprintResult result) {
+                public void onComplete(SprintResult result) {
+                    assertFalse(true);
+                }
+                public boolean onStatus(SprintResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
                     return true;
@@ -139,7 +142,10 @@ public class SprintTest {
             steps.add(new TestStep(new URL("http://example.com")));
             s.setSteps(steps);
             s.addListener(new ISprintListener() {
-                public boolean onData(SprintResult result) {
+                public void onComplete(SprintResult result) {
+                    assertFalse(true);
+                }
+                public boolean onStatus(SprintResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
                     return true;
@@ -164,7 +170,10 @@ public class SprintTest {
         try {
             Sprint s = new Sprint("user", "public-key", "localhost", 9295);
             s.addListener(new ISprintListener() {
-                public boolean onData(SprintResult result) {
+                public void onComplete(SprintResult result) {
+                    assertFalse(true);
+                }
+                public boolean onStatus(SprintResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
                     return true;
@@ -196,7 +205,7 @@ public class SprintTest {
         
         //job_status response
         handler.getConnection().setMappedData("/api/1/jobs/a123/status",
-                "{\"_id\":\"a123\",\"ok\":true, \"status\":\"completed\","
+                "{\"_id\":\"a123\",\"ok\":true, \"status\":\"running\","
                 + "\"result\":{\"region\":\"california\",\"duration\":10,"
                 + "\"steps\":[{\"duration\":10,\"connect\":1,"
                 + "\"request\":{\"line\":\"GET / HTTP/1.1\",\"method\":\"GET\","
@@ -209,7 +218,7 @@ public class SprintTest {
         steps.add(new TestStep(new URL("http://example.com")));
         s.setSteps(steps);
         s.addListener(new ISprintListener() {
-            public boolean onData(SprintResult result) {
+            public boolean onStatus(SprintResult result) {
                 assertNotNull(result);
                 assertNotNull(result.getSteps());
                 assertEquals(result.getSteps().size(), 1);
@@ -224,6 +233,9 @@ public class SprintTest {
                 assertNotNull(steps.get(0).getRequest().getHeaders().get("a"));
                 assertEquals("b", steps.get(0).getRequest().getHeaders().get("a"));
                 return false;
+            }
+            public void onComplete(SprintResult result) {
+                assertFalse(true);
             }
         });
         s.execute();

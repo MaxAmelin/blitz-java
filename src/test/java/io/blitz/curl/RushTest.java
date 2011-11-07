@@ -73,13 +73,13 @@ public class RushTest {
         intervals.add(new Interval(1, 10, 10));
         r.setPattern(new Pattern(intervals));
         r.addListener(new IRushListener() {
-            public boolean onData(RushResult result) {
+            public void onComplete(RushResult result) {
                 assertNotNull(result);
                 assertNotNull(result.getTimeline());
                 assertEquals("california", result.getRegion());
                 assertFalse(result.getTimeline().isEmpty());
-                return true;
             }
+            public boolean onStatus(RushResult result) { return true; }
         });
         r.execute();
         assertEquals(handler.getConnection().getHeaders().get("X-API-Key"), "private-key");
@@ -104,10 +104,13 @@ public class RushTest {
             intervals.add(new Interval(1, 10, 10));
             r.setPattern(new Pattern(intervals));
             r.addListener(new IRushListener() {
-                public boolean onData(RushResult result) {
+                public void onComplete(RushResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
-                    return true;
+                }
+                public boolean onStatus(RushResult result) { 
+                    assertFalse(true);
+                    return true; 
                 }
             });
             r.execute();
@@ -141,10 +144,13 @@ public class RushTest {
             intervals.add(new Interval(1, 10, 10));
             r.setPattern(new Pattern(intervals));
             r.addListener(new IRushListener() {
-                public boolean onData(RushResult result) {
+                public void onComplete(RushResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
-                    return true;
+                }
+                public boolean onStatus(RushResult result) { 
+                    assertFalse(true);
+                    return true; 
                 }
             });
             r.execute();
@@ -171,11 +177,13 @@ public class RushTest {
             steps.add(new TestStep(new URL("http://example.com")));
             r.setSteps(steps);
             r.addListener(new IRushListener() {
-
-                public boolean onData(RushResult result) {
+                public void onComplete(RushResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
-                    return true;
+                }
+                public boolean onStatus(RushResult result) { 
+                    assertFalse(true);
+                    return true; 
                 }
             });
             r.execute();
@@ -195,11 +203,13 @@ public class RushTest {
             intervals.add(new Interval(1, 10, 10));
             r.setPattern(new Pattern(intervals));
             r.addListener(new IRushListener() {
-
-                public boolean onData(RushResult result) {
+                public void onComplete(RushResult result) {
                     // fail if we get a ok message
                     assertFalse(true);
-                    return true;
+                }
+                public boolean onStatus(RushResult result) { 
+                    assertFalse(true);
+                    return true; 
                 }
             });
             r.execute();
@@ -227,7 +237,7 @@ public class RushTest {
         
         //job_status response
         handler.getConnection().setMappedData("/api/1/jobs/c123/status",
-                "{\"_id\":\"c123\",\"ok\":true, \"status\":\"completed\","
+                "{\"_id\":\"c123\",\"ok\":true, \"status\":\"running\","
                 + "\"result\":{\"region\":\"california\",\"timeline\":["
                 + "{\"duration\":0.1,\"total\":10,\"executed\":8,\"errors\":1,"
                 + "\"timeouts\":1,\"volume\":10},"
@@ -243,12 +253,15 @@ public class RushTest {
         intervals.add(new Interval(1, 10, 10));
         r.setPattern(new Pattern(intervals));
         r.addListener(new IRushListener() {
-            public boolean onData(RushResult result) {
+            public boolean onStatus(RushResult result) {
                 assertNotNull(result);
                 assertNotNull(result.getTimeline());
                 assertEquals("california", result.getRegion());
                 assertFalse(result.getTimeline().isEmpty());
                 return false;
+            }
+            public void onComplete(RushResult result) {
+                assertFalse(true);
             }
         });
         r.execute();

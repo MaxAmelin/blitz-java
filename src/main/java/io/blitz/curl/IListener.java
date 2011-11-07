@@ -8,10 +8,17 @@ package io.blitz.curl;
 public interface IListener<Result> {
     
     /**
-     * Will be called when the client return successful data. If returns false
+     * Will be called when the client return successful data from 
+     * Client.jobStatus calls. If returns false
      * it will send an abort request to blitz.
      * @param result
      * @return false if the current job should be aborted.
      */
-    boolean onData(Result result);
+    boolean onStatus(Result result);
+    
+    /**
+     * Will be called when the test finishes successfully.
+     * @param result
+     */
+    void onComplete(Result result);
 }
