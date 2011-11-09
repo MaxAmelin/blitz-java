@@ -118,9 +118,9 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                 Integer errors = (Integer) item.get("errors");
                 Integer timeouts = (Integer) item.get("timeouts");
                 Integer volume = (Integer) item.get("volume");
-                Integer txBytes = (Integer) item.get("txBytes");
-                Integer rxBytes = (Integer) item.get("rxBytes");
-                
+                Number txBytes = (Number) item.get("txbytes");
+                Number rxBytes = (Number) item.get("rxbytes");
+
                 Collection<Step> steps = new ArrayList<Step>();
                 Collection<?> stepList = (Collection<?>) item.get("steps");
                 if (stepList != null) {
@@ -137,9 +137,11 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                     }
                 }
                 
-                Double time = (timestamp == null) ? null : timestamp.doubleValue();
-                Point point = new Point(time, duration.doubleValue(), total, hits, 
-                       errors, timeouts, volume, txBytes, rxBytes, steps);
+                Double time = (timestamp==null) ? null : timestamp.doubleValue();
+                Integer tx = (txBytes==null) ? null : txBytes.intValue();
+                Integer rx = (rxBytes==null) ? null : rxBytes.intValue();
+                Point point = new Point(time, duration.doubleValue(), total, 
+                        hits, errors, timeouts, volume, tx, rx, steps);
                
                 timeline.add(point);
             }
