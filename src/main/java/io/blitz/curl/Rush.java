@@ -8,7 +8,6 @@ import io.blitz.curl.rush.RushResult;
 import io.blitz.curl.rush.Step;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -138,7 +137,7 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                     }
                 }
                 
-                Date time = (timestamp == null) ? null : new Date(timestamp.intValue()*1000);
+                Double time = (timestamp == null) ? null : timestamp.doubleValue();
                 Point point = new Point(time, duration.doubleValue(), total, hits, 
                        errors, timeouts, volume, txBytes, rxBytes, steps);
                

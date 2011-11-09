@@ -1,7 +1,6 @@
 package io.blitz.curl.rush;
 
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Snapshot of a rush at time[i] containing information about hits, errors
@@ -14,7 +13,7 @@ public class Point {
     /**
      * The timestamp of this snapshot
      */
-    private Date timestamp;
+    private Double timestamp;
     
     /**
      * The average response time at this time
@@ -61,7 +60,7 @@ public class Point {
      */
     private Collection<Step> steps;
 
-    public Point(Date timestamp, Double duration, Integer total, 
+    public Point(Double timestamp, Double duration, Integer total, 
             Integer hits, Integer errors, Integer timeouts, Integer volume, 
             Integer txBytes, Integer rxBytes, Collection<Step> steps) {
         
@@ -97,7 +96,7 @@ public class Point {
         return timeouts;
     }
 
-    public Date getTimestamp() {
+    public Double getTimestamp() {
         return timestamp;
     }
 

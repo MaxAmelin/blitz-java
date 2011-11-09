@@ -17,7 +17,7 @@ On your **pom.xml**
     <dependency>
         <groupId>io.blitz</groupId>
         <artifactId>blitz-api-client</artifactId>
-        <version>0.2.1</version>
+        <version>0.2.2</version>
     </dependency>
 
 Then
