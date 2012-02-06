@@ -57,7 +57,6 @@ public class Curl {
     public static String RE_SQ = "'[^'\\\\\\r\\n]*(?:\\\\.[^'\\\\\\r\\n]*)*'";
     public static String RE_WS = "\\S+";
     public static String RE_PATTERN = "(?:.*\\s|^)(-p|--pattern)(?:\\s.+)";
-    public static String RE_REGION = "^california|virginia|singapore|ireland|japan$";
     public static String RE_PATTERN_VALUE = "^(\\d+)-(\\d+):(\\d+)$";
     public static String RE_VARIABLE = "^(?:-v|--variable):(\\S+)$";
     public static String RE_VAR_LIST = "^(list)?\\[([^\\]]+)\\]$";
@@ -179,9 +178,8 @@ public class Curl {
                 //region
                 else if(cmd.matches("-r|--region")) {
                     String value = stripQuotes(scanner.findInLine(pattern));
-                    if(!value.matches(RE_REGION)) {
-                        String msg = "region must be one of california, "
-                                + "virginia, singapore, japan or ireland";
+                    if("".equals(value)) {
+                        String msg = "Missing value for region";
                         throw new IllegalArgumentException(msg);
                     }
                     test.setRegion(value);
