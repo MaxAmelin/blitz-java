@@ -1,10 +1,10 @@
 package io.blitz.curl;
 
-import io.blitz.curl.config.Pattern;
 import io.blitz.curl.exception.ValidationException;
 import io.blitz.curl.rush.IRushListener;
-import io.blitz.curl.rush.Point;
 import io.blitz.curl.rush.RushResult;
+import io.blitz.curl.config.Pattern;
+import io.blitz.curl.rush.Point;
 import io.blitz.curl.rush.Step;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,11 +113,11 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                 Map<String, Object> item = (Map<String, Object>) obj;
                 Number timestamp = (Number) item.get("timestamp");
                 Number duration = (Number) item.get("duration");
-                Integer total = (Integer) item.get("total");
-                Integer hits = (Integer) item.get("executed");
-                Integer errors = (Integer) item.get("errors");
-                Integer timeouts = (Integer) item.get("timeouts");
-                Integer volume = (Integer) item.get("volume");
+                Integer total = parseInt(item.get("total"));
+                Integer hits = parseInt(item.get("executed"));
+                Integer errors = parseInt(item.get("errors"));
+                Integer timeouts = parseInt(item.get("timeouts"));
+                Integer volume = parseInt(item.get("volume"));
                 Number txBytes = (Number) item.get("txbytes");
                 Number rxBytes = (Number) item.get("rxbytes");
 
@@ -128,9 +128,9 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                         Map<String, Object> stepItem = (Map<String, Object>) stepObj;
                         Number d = (Number) stepItem.get("d");
                         Number c = (Number) stepItem.get("c");
-                        Integer e = (Integer) stepItem.get("e");
-                        Integer t = (Integer) stepItem.get("t");
-                        Integer a = (Integer) stepItem.get("a");
+                        Integer e = parseInt(stepItem.get("e"));
+                        Integer t = parseInt(stepItem.get("t"));
+                        Integer a = parseInt(stepItem.get("a"));
                         
                         Step step = new Step(d.doubleValue(), c.doubleValue(), e, t, a);
                         steps.add(step);
@@ -138,8 +138,8 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
                 }
                 
                 Double time = (timestamp==null) ? null : timestamp.doubleValue();
-                Integer tx = (txBytes==null) ? null : txBytes.intValue();
-                Integer rx = (rxBytes==null) ? null : rxBytes.intValue();
+                Integer tx = (txBytes==null) ? null : parseDouble(txBytes).intValue();
+                Integer rx = (rxBytes==null) ? null : parseDouble(rxBytes).intValue();
                 Point point = new Point(time, duration.doubleValue(), total, 
                         hits, errors, timeouts, volume, tx, rx, steps);
                

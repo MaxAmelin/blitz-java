@@ -1,5 +1,6 @@
 package io.blitz.curl;
 
+import com.google.gson.internal.LazilyParsedNumber;
 import io.blitz.curl.exception.AuthenticationException;
 import io.blitz.curl.exception.BlitzException;
 import io.blitz.curl.exception.ValidationException;
@@ -284,5 +285,29 @@ public abstract class AbstractTest<Listener extends IListener, Result>
     protected boolean abort() {
         Map<String, Object> job = client.abort(jobId);
         return job != null && job.containsKey("ok");
+    }
+
+    /**
+     * Convert com.google.gson.internal.LazilyParsedNumber to Integer
+     * @param number LazilyParsedNumber
+     * @return integer
+     */
+    protected Integer parseInt(Object number) {
+        if (number.getClass().isAssignableFrom(LazilyParsedNumber.class)) {
+            return ((LazilyParsedNumber)number).intValue();
+        }
+        return (Integer) number;
+    }
+    
+    /**
+     * convert com.google.gson.internal.LazilyParsedNumber to Double
+     * @param number LazilyParsedNumber
+     * @return double
+     */
+    protected Double parseDouble(Object number) {
+        if (number.getClass().isAssignableFrom(LazilyParsedNumber.class)) {
+            return ((LazilyParsedNumber)number).doubleValue();
+        }
+        return (Double) number;
     }
 }

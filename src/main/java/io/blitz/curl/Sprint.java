@@ -74,7 +74,7 @@ public class Sprint extends AbstractTest<ISprintListener, SprintResult> {
         String region = (String) result.get("region");
         Number duration = (Number) result.get("duration");
 
-        Double durationDbl = (duration != null) ? duration.doubleValue() : null;
+        Double durationDbl = (duration != null) ? parseDouble(duration) : null;
         
         Collection<Step> steps = new ArrayList<Step>();
         Collection<?> list = (Collection<?>) result.get("steps");
@@ -109,13 +109,13 @@ public class Sprint extends AbstractTest<ISprintListener, SprintResult> {
                     Map<String, Object> headers = (res.containsKey("headers")) ?
                             (Map<String, Object>) res.get("headers") : null;
 
-                    response = new Response(line, (status!=null) ? status.intValue() : null, 
+                    response = new Response(line, (status!=null) ? parseInt(status) : null, 
                             message, headers, content);
                 }
                 Double itemDurationDbl = (itemDuration != null) ? 
-                        itemDuration.doubleValue() : null;
+                        parseDouble(itemDuration) : null;
                 Double itemConnectDbl = (itemConnect != null) ? 
-                        itemConnect.doubleValue() : null;
+                        parseDouble(itemConnect) : null;
                 
                 Step step = new Step(itemDurationDbl, itemConnectDbl, request, response);
                 steps.add(step);
