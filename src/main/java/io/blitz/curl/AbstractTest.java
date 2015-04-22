@@ -308,7 +308,7 @@ public abstract class AbstractTest<Listener extends IListener, Result>
         if (number.getClass().isAssignableFrom(LazilyParsedNumber.class)) {
             return ((LazilyParsedNumber)number).intValue();
         }
-        return (Integer) number;
+        return ((Number)number).intValue();
     }
     
     /**
@@ -320,6 +320,6 @@ public abstract class AbstractTest<Listener extends IListener, Result>
         if (number.getClass().isAssignableFrom(LazilyParsedNumber.class)) {
             return ((LazilyParsedNumber)number).doubleValue();
         }
-        return (Double) number;
+        return ((Number)number).doubleValue();
     }
 }
