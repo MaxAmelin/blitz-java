@@ -58,6 +58,11 @@ public class Client {
     private int port;
     
     /**
+     * Server protocol
+     */
+    private String protocol;
+
+    /**
      * Api Key returned by the login, to be used on all subsequent requests.
      */
     private String authenticatedKey;
@@ -67,10 +72,15 @@ public class Client {
     }
 
     public Client(String user, String apiKey, String host, int port) {
+        this(user, apiKey, host, port, "http");
+    }
+
+    public Client(String user, String apiKey, String host, int port, String protocol) {
         this.user = user;
         this.apiKey = apiKey;
         this.port = port;
         this.host = host;
+        this.protocol = protocol;
         this.authenticatedKey = null;
     }
 
@@ -81,7 +91,7 @@ public class Client {
      */
     public Map<String, Object> login() {
         try {
-            URL url = new URL("http", host, port, "/login/api");
+            URL url = new URL(protocol, host, port, "/login/api");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             //set the headers
             addCredentials(connection);
@@ -119,7 +129,7 @@ public class Client {
         }
         try {
             String data = toJson(test);
-            URL url = new URL("http", host, port, "/api/1/curl/execute");
+            URL url = new URL(protocol, host, port, "/api/1/curl/execute");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             //set the method
             connection.setRequestMethod("POST");
@@ -155,7 +165,7 @@ public class Client {
             throw new BlitzException("client", "Invalid job ID");
         }
         try {
-            URL url = new URL("http", host, port, "/api/1/jobs/"+jobId+"/status");
+            URL url = new URL(protocol, host, port, "/api/1/jobs/"+jobId+"/status");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             //set the headers
             addCredentials(connection);
@@ -182,7 +192,7 @@ public class Client {
         }
         try {
             String data = "";
-            URL url = new URL("http", host, port, "/api/1/jobs/"+jobId+"/abort");
+            URL url = new URL(protocol, host, port, "/api/1/jobs/"+jobId+"/abort");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             //set the headers
             addCredentials(connection);

@@ -41,6 +41,12 @@ public abstract class AbstractTest<Listener extends IListener, Result>
     private transient Integer port;
     
     /**
+     * Transient property used to connect the client when necessary.
+     * Not meant to be serialized.
+     */
+    private transient String protocol;
+
+    /**
      * Connects with the server and handle the request/response.
      * Not meant to be serialized.
      */
@@ -175,7 +181,12 @@ public abstract class AbstractTest<Listener extends IListener, Result>
                 throw new AuthenticationException("No credentials");
             }
             else if(host != null && port != null) {
-                client = new Client(username, apiKey, host, port);
+                if(protocol != null) {
+                    client = new Client(username, apiKey, host, port, protocol);
+                }
+                else {
+                    client = new Client(username, apiKey, host, port);
+                }
             }
             else {
                 client = new Client(username, apiKey);
@@ -270,11 +281,12 @@ public abstract class AbstractTest<Listener extends IListener, Result>
      * @param host the host to connect
      * @param port the port to connect
      */
-    protected void setCredentials(String username, String apiKey, String host, Integer port) {
+    protected void setCredentials(String username, String apiKey, String host, Integer port, String protocol) {
         this.username = username;
         this.apiKey = apiKey;
         this.host = host;
         this.port = port;
+        this.protocol = protocol;
     }
     
     /**

@@ -52,7 +52,11 @@ public class Rush extends AbstractTest<IRushListener, RushResult> {
     }
 
     public Rush(String username, String apiKey, String host, Integer port) {
-        setCredentials(username, apiKey, host, port);
+        setCredentials(username, apiKey, host, port, null);
+    }
+
+    public Rush(String username, String apiKey, String host, Integer port, String protocol) {
+        setCredentials(username, apiKey, host, port, protocol);
     }
     
     /**

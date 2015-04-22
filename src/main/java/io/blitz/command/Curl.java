@@ -93,6 +93,22 @@ public class Curl {
      */
     public static AbstractTest parse(String username, 
             String apiKey, String host, Integer port, String command) {
+        return parse(username, apiKey, host, port, command, null);
+    }
+
+    /**
+     * Parse a curl command line and create a sprint or rush instance,
+     * ready to be sent by the Client.
+     * @param command the command to be parsed
+     * @param username username to be used in the test
+     * @param apiKey api key used to authenticate
+     * @param host host to connect
+     * @param port port for the service
+     * @param protocol protocol for the service
+     * @return a sprint of rush instance ready to run
+     */
+    public static AbstractTest parse(String username,
+            String apiKey, String host, Integer port, String command, String protocol) {
         
         if(command == null || command.length() == 0) {
             throw new IllegalArgumentException("No command line provided");
@@ -105,10 +121,10 @@ public class Curl {
         // create the correct test instance based on the command
         AbstractTest test;
         if(command.matches(RE_PATTERN)) {
-            test = new Rush(username, apiKey, host, port);
+            test = new Rush(username, apiKey, host, port, protocol);
         }
         else {
-            test = new Sprint(username, apiKey, host, port);
+            test = new Sprint(username, apiKey, host, port, protocol);
         }
         
         while(scanner.hasNext()) {
